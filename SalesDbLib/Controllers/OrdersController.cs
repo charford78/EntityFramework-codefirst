@@ -23,48 +23,48 @@ namespace SalesDbLib.Controllers
                                        .Include(x => x.Customer) 
                                        .ToListAsync();
         }
-        public Order GetbyPk(int Id)
+        public async Task<Order> GetbyPk(int Id)
         {
-            return _context.Orders.Find(Id);
+            return await _context.Orders.FindAsync(Id);
         }
-        public bool Create(Order order)
+        public async Task<bool> Create(Order order)
         {
             if(order.Id != 0)
             {
                 throw new Exception("You must enter 0 for Id!");
             }
-            _context.Orders.Add(order);
-            var rowsAffected = _context.SaveChanges();
+            await _context.Orders.AddAsync(order);
+            var rowsAffected = await _context.SaveChangesAsync();
             if(rowsAffected != 1)
             {
                 throw new Exception("Create failed!");
             }
             return true;
         }
-        public bool Change(int Id, Order order)
+        public async Task<bool> Change(int Id, Order order)
         {
             if(Id != order.Id)
             {
                 throw new Exception("Id's do not match!");
             }
             _context.Entry(order).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            var rowsAffected = _context.SaveChanges();
+            var rowsAffected = await _context.SaveChangesAsync();
             if(rowsAffected != 1)
             {
                 throw new Exception("Update failed!");
             }
             return true;
         }
-        public bool Remove(int Id)
+        public async Task<bool> Remove(int Id)
         {
-            var order = _context.Orders.Find(Id);
+            var order = await _context.Orders.FindAsync(Id);
             if(order == null)
             {
                 return false;
             }
             _context.Orders.Remove(order);
-            _context.SaveChanges();
-            return true
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

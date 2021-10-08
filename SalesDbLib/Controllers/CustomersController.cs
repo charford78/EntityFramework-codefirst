@@ -26,6 +26,10 @@ namespace SalesDbLib.Controllers
         {
             return await _context.Customers.FindAsync(Id);
         }
+        public async Task<Customer> GetbyCode(string Code)
+        {
+            return await _context.Customers.SingleOrDefaultAsync(c => c.Code == Code);
+        }
         public async Task<bool> Create(Customer customer)
         {
             if(customer.Id != 0)
